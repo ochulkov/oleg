@@ -1,0 +1,107 @@
+﻿<Window x:Class="doedusam.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:doedusam"
+        mc:Ignorable="d"
+ 
+    FontFamily="ArialBlack"    
+    Title="Услуги авто сервиса" MinHeight="300" 
+        MinWidth="300"  
+        Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel
+        Orientation="Vertical"
+        Margin="5"
+        VerticalAlignment="Bottom">
+            <Button
+            x:Name="ExitButton"
+            Content="Выход"
+            Click="ExitButton_Click"/>
+        </StackPanel>
+        <Image 
+        Margin="5"
+        Source="C:\Users\User\Pictures/service_logo.png" 
+        VerticalAlignment="Top"/>
+
+        <DataGrid 
+    Grid.Column="1"
+    CanUserAddRows="false"
+    AutoGenerateColumns="False"
+    ItemsSource="{Binding ServiceList}">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger 
+                Binding="{Binding HasDiscount}" 
+                Value="True">
+                            <Setter 
+                    Property="Background" 
+                    Value="LightGreen"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
+
+
+            <DataGrid.Columns>
+
+            <DataGridTextColumn
+            Width="250"
+            Header="Наименование услуги"
+            Binding="{Binding Title}"/>
+
+                <DataGridTemplateColumn 
+    Width="100"
+    Header="Стоимость">
+
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <!-- TextBlock поддерживает перечеркивание -->
+                            <TextBlock 
+                TextDecorations="{Binding CostTextDecoration}"
+                Text="{Binding CostString}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+
+                <DataGridTextColumn 
+            Width="100"
+            Header="Стоимость со скидкой"
+            Binding="{Binding CostWithDiscount}"/>
+                <DataGridTextColumn 
+            Width="150"
+            Header="Продолжительность"
+            Binding="{Binding DurationInSeconds}"/>
+            <DataGridTemplateColumn 
+            Width="64"
+            Header="">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+
+                        <Image 
+                        Height="64" 
+                        Width="64" 
+                        Source="{Binding ImageUri}" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+
+            <DataGridTextColumn 
+            Width="60"
+            Header="Скидка"
+            Binding="{Binding Discount}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Window>
+   
