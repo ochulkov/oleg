@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 
 namespace doedusam
 {
@@ -67,7 +69,7 @@ namespace doedusam
     }
 
 
-        public partial class MainWindow : Window
+        public partial class MainWindow : Window, INotifyPropertyChanged
     {
         public MainWindow()
         {
@@ -92,5 +94,73 @@ namespace doedusam
         {
 
         }
+        private Boolean _IsAdminMode = false;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // публичный геттер, который меняет текущий режим (Админ/не Админ)
+        public Boolean IsAdminMode
+        {
+            get { return _IsAdminMode; }
+            set
+            {
+                _IsAdminMode = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs("AdminModeCaption"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("AdminVisibility"));
+                }
+            }
+        }
+        // этот геттер возвращает текст для кнопки в зависимости от текущего режима
+        public string AdminModeCaption
+        {
+            get
+            {
+                if (IsAdminMode) return "Выйти из режима\nАдминистратора";
+                return "Войти в режим\nАдминистратора";
+            }
+        }
+
+        private void AdminButton_Click(object sender, RoutedEventArgs e)
+        {
+            // если мы уже в режиме Администратора, то выходим из него 
+            if (IsAdminMode) IsAdminMode = false;
+            else
+            {
+                // создаем окно для ввода пароля
+                var InputBox = new AdminWindow("Введите пароль Администратора");
+                // и показываем его как диалог (модально)
+                if ((bool)InputBox.ShowDialog())
+                {
+                    // если нажали кнопку "Ok", то включаем режим, если пароль введен верно
+                    IsAdminMode = InputBox.InputText == "0000";
+                }
+            }
+        }
+        public string AdminVisibility
+        {
+            get
+            {
+                if (IsAdminMode) return "Visible";
+                return "Collapsed";
+            }
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
+
 }
